@@ -1,73 +1,4 @@
-/* Rotondwa Portfolio — gallery, lightbox, scroll reveal, 3D tilt */
-
-const screenshots = [
-  {
-    src: "images/dashboard.png",
-    caption: "Mister Auto and Turbo — Dashboard",
-  },
-];
-
-let current = 0;
-
-function renderGallery() {
-  const gal = document.getElementById("gal");
-  if (!gal) return;
-
-  gal.innerHTML = screenshots
-    .map(
-      (s, i) =>
-        `<img src="${s.src}" alt="${s.caption}" loading="lazy" data-index="${i}" title="${s.caption}" class="reveal">`
-    )
-    .join("");
-
-  gal.querySelectorAll("img").forEach((img) => {
-    img.addEventListener("click", () => {
-      const i = Number(img.dataset.index);
-      show(i);
-    });
-    img.addEventListener("error", () => {
-      img.style.display = "none";
-      if (!gal.querySelector(".missing-note")) {
-        const note = document.createElement("p");
-        note.className = "missing-note";
-        note.style.cssText =
-          "color:var(--muted);font-family:var(--mono);font-size:0.85rem;margin-top:0.5rem;";
-        note.textContent =
-          "Add your dashboard screenshot as images/dashboard.png in the repo.";
-        gal.appendChild(note);
-      }
-    });
-  });
-}
-
-function show(index) {
-  if (!screenshots.length) return;
-  current = ((index % screenshots.length) + screenshots.length) % screenshots.length;
-  const s = screenshots[current];
-  const lb = document.getElementById("lb");
-  const lbi = document.getElementById("lbi");
-  const lbc = document.getElementById("lbc");
-  if (!lb || !lbi) return;
-  lbi.src = s.src;
-  lbi.alt = s.caption;
-  if (lbc) lbc.textContent = s.caption;
-  lb.classList.add("open");
-  document.body.style.overflow = "hidden";
-}
-
-function hide() {
-  const lb = document.getElementById("lb");
-  if (lb) lb.classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-function next() {
-  show(current + 1);
-}
-
-function prev() {
-  show(current - 1);
-}
+/* Rotondwa Portfolio — scroll reveal, 3D tilt, project slideshow */
 
 function observeReveals() {
   const els = document.querySelectorAll(".reveal:not(.visible)");
@@ -92,7 +23,6 @@ function markStaticReveals() {
     "#about .section-text",
     "#skills .card",
     "#projects .card",
-    "#gallery .section-text",
     "#experience .item",
     "#contact .section-text",
     "#contact .btns",
@@ -114,7 +44,7 @@ function setupHeaderScroll() {
 }
 
 function setupTiltCards() {
-  const cards = document.querySelectorAll(".card, .stat");
+  const cards = document.querySelectorAll(".card:not(.feat), .stat");
   const maxTilt = 7;
   cards.forEach((card) => {
     card.addEventListener("mousemove", (e) => {
@@ -140,31 +70,98 @@ function setupTiltCards() {
   });
 }
 
+/* ---------- Slideshow inside featured project ---------- */
+function setupSlideshow() {
+  const root = document.getElementById("slideshow");
+  if (!root) return;
+
+  const slides = Array.from(root.querySelectorAll(".slide"));
+  const dotsWrap = document.getElementById("slide-dots");
+  const prevBtn = document.getElementById("slide-prev");
+  const nextBtn = document.getElementById("slide-next");
+  if (!slides.length) return;
+
+  let index = 0;
+  let timer = null;
+  const INTERVAL = 4200;
+
+  // Build dots
+  if (dotsWrap) {
+    dotsWrap.innerHTML = slides
+      .map(
+        (_, i) =>
+          `<button type="button" class="dot${i === 0 ? " active" : ""}" data-i="${i}" aria-label="Slide ${i + 1}"></button>`
+      )
+      .join("");
+    dotsWrap.querySelectorAll(".dot").forEach((dot) => {
+      dot.addEventListener("click", () => goTo(Number(dot.dataset.i)));
+    });
+  }
+
+  function goTo(i) {
+    slides[index].classList.remove("active");
+    index = ((i % slides.length) + slides.length) % slides.length;
+    slides[index].classList.add("active");
+    if (dotsWrap) {
+      dotsWrap.querySelectorAll(".dot").forEach((d, di) => {
+        d.classList.toggle("active", di === index);
+      });
+    }
+    restart();
+  }
+
+  function next() {
+    goTo(index + 1);
+  }
+  function prev() {
+    goTo(index - 1);
+  }
+
+  function restart() {
+    if (timer) clearInterval(timer);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    timer = setInterval(next, INTERVAL);
+  }
+
+  if (prevBtn) prevBtn.addEventListener("click", prev);
+  if (nextBtn) nextBtn.addEventListener("click", next);
+
+  // Pause on hover
+  root.addEventListener("mouseenter", () => {
+    if (timer) clearInterval(timer);
+  });
+  root.addEventListener("mouseleave", restart);
+
+  // Touch swipe
+  let touchX = null;
+  root.addEventListener(
+    "touchstart",
+    (e) => {
+      touchX = e.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
+  root.addEventListener(
+    "touchend",
+    (e) => {
+      if (touchX == null) return;
+      const dx = e.changedTouches[0].screenX - touchX;
+      if (Math.abs(dx) > 40) {
+        if (dx < 0) next();
+        else prev();
+      }
+      touchX = null;
+    },
+    { passive: true }
+  );
+
+  restart();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  renderGallery();
   markStaticReveals();
   observeReveals();
   setupHeaderScroll();
   setupTiltCards();
-
-  const cl = document.getElementById("cl");
-  const nx = document.getElementById("nx");
-  const pv = document.getElementById("pv");
-  if (cl) cl.addEventListener("click", hide);
-  if (nx) nx.addEventListener("click", next);
-  if (pv) pv.addEventListener("click", prev);
-
-  const lb = document.getElementById("lb");
-  if (lb) {
-    lb.addEventListener("click", (e) => {
-      if (e.target === lb) hide();
-    });
-  }
-
-  document.addEventListener("keydown", (e) => {
-    if (!document.getElementById("lb")?.classList.contains("open")) return;
-    if (e.key === "Escape") hide();
-    if (e.key === "ArrowRight") next();
-    if (e.key === "ArrowLeft") prev();
-  });
+  setupSlideshow();
 });
