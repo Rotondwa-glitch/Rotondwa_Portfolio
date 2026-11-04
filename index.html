@@ -13,7 +13,7 @@
 <nav>
 <div class="nav-inner">
 <b>~/rotondwa</b>
-<a href="#about">about</a><a href="#skills">skills</a><a href="#projects">projects</a><a href="#gallery">screenshots</a><a href="#experience">experience</a><a href="#contact">contact</a>
+<a href="#about">about</a><a href="#skills">skills</a><a href="#projects">projects</a><a href="#experience">experience</a><a href="#contact">contact</a>
 </div>
 </nav>
 <main>
@@ -27,7 +27,7 @@
 <p class="lead">Software developer. I build role-based web systems in C# and ASP.NET Core, and mobile apps in Flutter, backed by Supabase. Currently shipping a workshop management platform for Mister Auto and Turbo.</p>
 <div class="btns">
 <a class="btn p" href="mailto:giftmadi0407@gmail.com">Get in touch</a>
-<a class="btn" href="#gallery">See the system</a>
+<a class="btn" href="#projects">See projects</a>
 <a class="btn" href="https://github.com/Rotondwa-glitch" target="_blank" rel="noopener">GitHub</a>
 <a class="btn" href="https://www.linkedin.com/in/rotondwa-madi-720049218/" target="_blank" rel="noopener">LinkedIn</a>
 </div>
@@ -71,7 +71,49 @@
 <section id="projects">
 <h2>projects<span>{}</span></h2>
 <div class="grid">
-<div class="card feat"><h3>Vehicle Service Management System · Mister Auto and Turbo</h3><p>Web app for workshop staff with role-based access (Managers, Receptionists, Mechanics), plus a Flutter app for customers to book services and follow progress, both on a Supabase backend. Modules: vehicles, customers, repair jobs, job cards, quotations, appointments, parts inventory, payments, vehicle collection, complaints, reports and user management.</p><span class="tag">C#</span><span class="tag">ASP.NET Core MVC</span><span class="tag">Flutter</span><span class="tag">Supabase</span><span class="tag">Role-based access</span><br><a href="#gallery">View screenshots →</a></div>
+
+<div class="card feat project-with-slides">
+  <h3>Vehicle Service Management System · Mister Auto and Turbo</h3>
+  <p>Web app for workshop staff with role-based access (Managers, Receptionists, Mechanics), plus a Flutter app for customers to book services and follow progress, both on a Supabase backend. Modules: vehicles, customers, repair jobs, job cards, quotations, appointments, parts inventory, payments, vehicle collection, complaints, reports and user management.</p>
+  <span class="tag">C#</span><span class="tag">ASP.NET Core MVC</span><span class="tag">Flutter</span><span class="tag">Supabase</span><span class="tag">Role-based access</span>
+
+  <div class="slideshow" id="slideshow" aria-label="Project screenshots">
+    <div class="slides">
+      <figure class="slide active" data-i="0">
+        <img src="images/web-dashboard.jpg" alt="Staff web dashboard" loading="lazy">
+        <figcaption>Web · Dashboard</figcaption>
+      </figure>
+      <figure class="slide" data-i="1">
+        <img src="images/web-reports.jpg" alt="Staff reports page" loading="lazy">
+        <figcaption>Web · Reports</figcaption>
+      </figure>
+      <figure class="slide" data-i="2">
+        <img src="images/web-performance.jpg" alt="Workshop performance" loading="lazy">
+        <figcaption>Web · Performance</figcaption>
+      </figure>
+      <figure class="slide" data-i="3">
+        <img src="images/web-login.jpg" alt="Staff portal login" loading="lazy">
+        <figcaption>Web · Staff login</figcaption>
+      </figure>
+      <figure class="slide" data-i="4">
+        <img src="images/mobile-vehicles.jpg" alt="Mobile vehicles list" loading="lazy">
+        <figcaption>Mobile · Your vehicles</figcaption>
+      </figure>
+      <figure class="slide" data-i="5">
+        <img src="images/mobile-actions.jpg" alt="Mobile quick actions" loading="lazy">
+        <figcaption>Mobile · Quick actions</figcaption>
+      </figure>
+      <figure class="slide" data-i="6">
+        <img src="images/mobile-login.jpg" alt="Mobile login" loading="lazy">
+        <figcaption>Mobile · Login</figcaption>
+      </figure>
+    </div>
+    <button type="button" class="slide-btn prev" id="slide-prev" aria-label="Previous screenshot">‹</button>
+    <button type="button" class="slide-btn next" id="slide-next" aria-label="Next screenshot">›</button>
+    <div class="slide-dots" id="slide-dots"></div>
+  </div>
+</div>
+
 <div class="card"><h3>Vehicle Management App</h3><p>Flutter app to add, edit and delete vehicles and track whether each is active, inactive or in maintenance.</p><span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">OOP</span><br><a href="https://github.com/Rotondwa-glitch/vehicle-management-app" target="_blank" rel="noopener">View code →</a></div>
 <div class="card"><h3>Calculator App</h3><p>MVC app managing calculators (name, serial number, model, function count) with full CRUD, backed by SQLite.</p><span class="tag">C#</span><span class="tag">MVC</span><span class="tag">SQLite</span><br><a href="https://github.com/Rotondwa-glitch/Calculator-App" target="_blank" rel="noopener">View code →</a></div>
 <div class="card"><h3>Contact Book App</h3><p>Add, edit and delete contacts in a clean interface.</p><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><br><a href="https://github.com/Rotondwa-glitch/Contact-Book-APP" target="_blank" rel="noopener">View code →</a></div>
@@ -80,16 +122,10 @@
 </div>
 </section>
 
-<section id="gallery">
-<h2>screenshots<span>.png</span></h2>
-<p class="section-text">Mister Auto and Turbo — Dashboard. Click the image to enlarge.</p>
-<div class="gal" id="gal"></div>
-</section>
-
 <section id="experience">
 <h2>experience<span>.log</span></h2>
 <div class="tl">
-<div class="item clk" onclick="show(0)" tabindex="0" role="button" onkeydown="if(event.key==='Enter')show(0)"><h3>Software Developer · Mister Auto and Turbo <span class="hint">▸ view screenshots</span></h3><div class="when">JUL 2026 – PRESENT</div>
+<div class="item"><h3>Software Developer · Mister Auto and Turbo</h3><div class="when">JUL 2026 – PRESENT</div>
 <ul><li>Building an ASP.NET Core MVC management app with role-based access for workshop staff.</li><li>Integrating Supabase as the shared backend between the web app and a Flutter mobile app.</li><li>Delivering customer and vehicle management, scheduling, job cards, quotations and service tracking.</li></ul></div>
 <div class="item"><h3>ICT Support Technician · Seabo Primary School</h3><div class="when">FEB 2026</div>
 <ul><li>Diagnosed and fixed desktop, laptop and printer issues.</li><li>Installed, configured and updated software, drivers and operating systems.</li><li>Carried out routine maintenance and system updates.</li></ul></div>
@@ -112,7 +148,6 @@
 </main>
 <footer>© 2026 Rotondwa Gift Madi</footer>
 
-<div id="lb"><img id="lbi" alt=""><p id="lbc"></p><div class="ctl"><button id="pv">← prev</button><button id="cl">close</button><button id="nx">next →</button></div></div>
 <script src="script.js"></script>
 </body>
 </html>
