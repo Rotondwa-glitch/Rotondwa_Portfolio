@@ -1,5 +1,15 @@
 /* Rotondwa Portfolio — scroll reveal, 3D tilt, project slideshow */
 
+const SLIDE_META = [
+  { key: "web-dashboard", caption: "Web · Dashboard" },
+  { key: "web-reports", caption: "Web · Reports" },
+  { key: "web-performance", caption: "Web · Performance" },
+  { key: "web-login", caption: "Web · Staff login" },
+  { key: "mobile-vehicles", caption: "Mobile · Your vehicles" },
+  { key: "mobile-actions", caption: "Mobile · Quick actions" },
+  { key: "mobile-login", caption: "Mobile · Login" },
+];
+
 function observeReveals() {
   const els = document.querySelectorAll(".reveal:not(.visible)");
   if (!els.length) return;
@@ -70,22 +80,38 @@ function setupTiltCards() {
   });
 }
 
-/* ---------- Slideshow inside featured project ---------- */
 function setupSlideshow() {
   const root = document.getElementById("slideshow");
-  if (!root) return;
-
-  const slides = Array.from(root.querySelectorAll(".slide"));
+  const slidesEl = document.getElementById("slides");
   const dotsWrap = document.getElementById("slide-dots");
   const prevBtn = document.getElementById("slide-prev");
   const nextBtn = document.getElementById("slide-next");
-  if (!slides.length) return;
+  if (!root || !slidesEl) return;
 
+  const images = window.SLIDE_IMAGES || {};
+  const slidesData = SLIDE_META.filter((s) => images[s.key]);
+
+  if (!slidesData.length) {
+    slidesEl.innerHTML =
+      '<p style="padding:2rem;color:var(--muted);font-family:var(--mono);font-size:0.85rem">Screenshots loading…</p>';
+    return;
+  }
+
+  slidesEl.innerHTML = slidesData
+    .map(
+      (s, i) =>
+        `<figure class="slide${i === 0 ? " active" : ""}" data-i="${i}">` +
+        `<img src="${images[s.key]}" alt="${s.caption}" loading="${i === 0 ? "eager" : "lazy"}">` +
+        `<figcaption>${s.caption}</figcaption>` +
+        `</figure>`
+    )
+    .join("");
+
+  const slides = Array.from(slidesEl.querySelectorAll(".slide"));
   let index = 0;
   let timer = null;
   const INTERVAL = 4200;
 
-  // Build dots
   if (dotsWrap) {
     dotsWrap.innerHTML = slides
       .map(
@@ -126,13 +152,11 @@ function setupSlideshow() {
   if (prevBtn) prevBtn.addEventListener("click", prev);
   if (nextBtn) nextBtn.addEventListener("click", next);
 
-  // Pause on hover
   root.addEventListener("mouseenter", () => {
     if (timer) clearInterval(timer);
   });
   root.addEventListener("mouseleave", restart);
 
-  // Touch swipe
   let touchX = null;
   root.addEventListener(
     "touchstart",
